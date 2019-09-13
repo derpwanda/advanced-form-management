@@ -1,32 +1,37 @@
-import React /* { useState } */ from "react";
+import React from "react";
 import { withFormik, Form, Field } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 
-const AnimalForm = props => {
-    console.log(props);
+const AnimalForm = ({ errors }) => {
+    // console.log(props);
     return (
         <Form>
-            {props.errors.species && <p>{props.errors.species}</p>}
-            <Field type='text' name='species' placeholder='Species' />
+            {errors.species &&
+                (<p className="error"> {errors.species} </p>)
+            }
+            <Field type='text' name='species' placeholder='species' />
+
+            {errors.age && <p className="error"> {errors.age} </p>}
             <Field type='number' name='age' placeholder='age' />
+
+            {errors.diet && <p className="error"> {errors.diet} </p>}
             <Field component='select' name='diet'>
                 <option value='' disabled>
                     Select Diet:
                 </option>
-                <option value='carnivore'>Carnivore</option>
-                <option value='herbivore'>Herbivore</option>
-                <option value='omnivore'>Omnivore</option>
+                <option value='carnivore'> Carnivore </option>
+                <option value='herbivore'> Herbivore </option>
+                <option value='omnivore'> Omnivore </option>
             </Field>
 
+            {errors.vaccinations && <p className="error"> {errors.vaccinations} </p>}
             <label>
                 <Field type='checkbox' name='vaccinations' />
-                <span>Vaccinations</span>
+                <span> Vaccinations </span>
             </label>
-
             <Field component='textarea' name='notes' placeholder='notes' />
-
-            <button type='submit'>Submit</button>
+            <button type='submit'> Submit </button>
         </Form>
     );
 };
@@ -39,7 +44,7 @@ export default withFormik({
         return {
             //always pass through something even if it's an empty string
             //these keys line up with the "name" attribute on our Fields
-            species: values.species || "default value",
+            species: values.species || "",
             age: values.age || "",
             diet: values.diet || "",
             vaccinations: values.vaccinations || false,
@@ -53,9 +58,7 @@ export default withFormik({
             .required("age required")
             .positive(),
         diet: yup.string().required("diet required"),
-        vaccinations: yup
-            .boolean()
-            .oneOf([true] /* "Animal must be vaccinated" */)
+        vaccinations: yup.boolean().oneOf([true])
     }),
     handleSubmit: values => {
         // console.log(values);
@@ -67,4 +70,4 @@ export default withFormik({
             });
     }
 })(AnimalForm);
-//curly brackets pass through object configuration
+//curly brackets pass through object configuration */ */
